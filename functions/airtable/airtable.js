@@ -26,6 +26,7 @@ exports.handler = function(event, context, callback) {
     REFERENCE YOUR BASE-SPECIFIC API FOR EXAMPLES OF
     COMMON CRUD OPERATIONS
   */
+  const data = [];
   // CREATE
   if (event.httpMethod === "POST") {
     const data = JSON.parse(event.body);
@@ -37,34 +38,43 @@ exports.handler = function(event, context, callback) {
     }, function(err, record) {
       if (err) {
         console.error(err);
-        return;
+        return callback(null, {
+          statusCode: 400,
+          body: JSON.stringify(err)
+        })
       }
       console.log(record.getId());
+      send(record.getId());
     });
   }  
-  
-  //const data = [];
-  // LIST
-  base('Table 1').select({
-    // Selecting records in Grid view:
-    view: "Grid view"
-  }).eachPage(function page(records, fetchNextPage) {
-    // This function (`page`) will get called for each page of records.
-    
-    //console.log(records);
-    send(records);    
-    /* records.forEach(function(record) {
-        console.log('Retrieved', record.get('Name'));
-        data.push(record);
-    });  */
+  else {
+    // LIST
+    base('Table 1').select({
+      // Selecting records in Grid view:
+      view: "Grid view"
+    }).eachPage(function page(records, fetchNextPage) {
+      // This function (`page`) will get called for each page of records.
+      
+      records.forEach(function(record) {
+          //console.log('Retrieved', record.get('Name'));
+          data.push(record);
+      }); 
 
-    // To fetch the next page of records, call `fetchNextPage`.
-    // If there are more records, `page` will get called again.
-    // If there are no more records, `done` will get called.
-    fetchNextPage();
+      // To fetch the next page of records, call `fetchNextPage`.
+      // If there are more records, `page` will get called again.
+      // If there are no more records, `done` will get called.
+      fetchNextPage();
 
-  }, function done(err) {
-    if (err) { console.error(err); return; }
-  }); 
-
+    }, function done(err) {
+      if (err) { 
+        console.error(err); 
+        return callback(null, {
+          statusCode: 400,
+          body: JSON.stringify(err)
+        })
+      }
+      console.log('Records:', data.length);
+      send(data);  
+    }); 
+  }
 }

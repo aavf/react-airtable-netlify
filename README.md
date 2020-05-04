@@ -2,7 +2,7 @@ Built this for learning reactjs, using Airtable DB + API and Netlify functions f
 
 If you want to build something using this stack check [Up and Running with Netlify, Airtable, and React](https://medium.com/swlh/up-and-running-with-netlify-airtable-and-react-428959473cf0)
 
-This is my 2nd react app so could have mistakes/bad practices.
+Just started learning react, this is one of my first apps so could have mistakes/bad practices.
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
